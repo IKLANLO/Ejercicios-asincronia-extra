@@ -55,8 +55,10 @@ async function getImagenRandom(){
 }
 
 async function getListaImagenes(){
+    const inputTextData = document.querySelector('#inputText').value
     paintContainer.innerHTML = ''
-    let imagen, request = ''
+    let imagen, request = '', searchNewBreed = ''
+    
     const razas = await axios.get('https://dog.ceo/api/breeds/list/all')
         .then((res) => {
             const { data } = res, listaRazas = []
@@ -71,21 +73,22 @@ async function getListaImagenes(){
                 }
             }
             
-            imagen = axios.get (searchUrlPart1 + listaRazas[random] + '/images')
-                .then((res) => {
-                    
-                    const {datosRaza} = res
-                    for (let i = 0; i < res.data.message.length; i++){
-                        console.log(res.data.message[i]);
-                        request += `<img src="${res.data.message[i]}"></img>`
-                    }
-                    paintContainer.innerHTML = request 
-                    
-                })
-                .catch((error) => {
-                    console.error(error)
-                    
-                })     
+            if (inputTextData === ''){
+                searchNewBreed = searchUrlPart1 + listaRazas[random] + '/images'
+            } else {
+                searchNewBreed = searchUrlPart1 + inputTextData + '/images'
+            }
+                imagen = axios.get (searchNewBreed)
+                    .then((res) => {
+                        for (let i = 0; i < res.data.message.length; i++){
+                            console.log(res.data.message[i]);
+                            request += `<img src="${res.data.message[i]}"></img>`
+                        }
+                        paintContainer.innerHTML = request   
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })    
         })        
 }
 
