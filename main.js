@@ -87,7 +87,16 @@ async function getListaImagenes(){
                         paintContainer.innerHTML = request   
                     })
                     .catch((error) => {
-                        console.error(error);
+                        
+                        paintContainer.innerHTML = `<div class="alert alert-danger" role="alert" id="breedAlert">
+                                                    Error! La raza introducida o el formato no son correctos
+                                                    </div>`
+                            
+                        setTimeout(()=>{
+                            const alert = document.querySelector('#breedAlert')
+                            alert.remove()
+                        }, 3000)
+                        console.error(error.message);
                     })    
         })        
 }
